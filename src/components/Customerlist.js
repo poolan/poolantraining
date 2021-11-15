@@ -1,11 +1,23 @@
 import React, { useState, useEffect} from 'react';
 import { AgGridReact} from 'ag-grid-react';
-
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-material.css';
+import AddIcon from '@mui/icons-material/Add';
+import DeleteIcon from '@mui/icons-material/Delete';
+
+
 
 function Customerlist() {
+
     const [customer, setCustomer] = useState ([]);
+    const [customers, setCustomers] = useState ({firstname: '', lastname: '', streetaddress: '', postcode: '',
+    city: '', email: '', phone: ''});
+
+    const addCustomer = () => {
+        setCustomer([customer, ...customers]);
+        setCustomer({firstname: '', lastname: '', streetaddress: '', postcode: '',
+        city: '', email: '', phone: ''})
+    }
 
     useEffect(() => {
         fetch('https://customerrest.herokuapp.com/api/customers')
@@ -23,8 +35,8 @@ function Customerlist() {
         {field: 'email', width: '180%', sortable: true, filter: true},
         {field: 'phone', width: '160%', sortable: true, filter: true},
     ]
-    
     return (
+
         <div className="ag-theme-material" style={{height: 600 , width: '90%', margin: 'auto'}}>
             <AgGridReact
                 rowData={customer}
