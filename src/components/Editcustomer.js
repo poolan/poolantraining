@@ -6,7 +6,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 
-export default function Editcustomer(props) {
+export default function EditCustomer(props) {
   const [open, setOpen] = React.useState(false);
   const [customer, setCustomer] = React.useState({
     firstname: "",
@@ -19,6 +19,16 @@ export default function Editcustomer(props) {
   });
 
   const handleClickOpen = () => {
+    console.log(props.row.value);
+    setCustomer({
+      firstname: props.row.data.firstname,
+      lastname: props.row.data.lastname,
+      streetaddress: props.row.data.streetaddress,
+      city: props.row.data.city,
+      postcode: props.row.data.postcode,
+      email: props.row.data.email,
+      phone: props.row.data.phone,
+    });
     setOpen(true);
   };
 
@@ -26,23 +36,18 @@ export default function Editcustomer(props) {
     setOpen(false);
   };
 
+  const handleSave = () => {
+    props.editCustomer(props.row.data.links[0].href, customer);
+    handleClose();
+  };
+
   const inputChanged = (event) => {
     setCustomer({ ...customer, [event.target.name]: event.target.value });
   };
 
-  const addCustomer = () => {
-    props.saveCustomer(customer);
-    handleClose();
-  };
-
   return (
     <div>
-      <Button
-        style={{ margin: 10 }}
-        variant="outlined"
-        color="primary"
-        onClick={handleClickOpen}
-      >
+      <Button size="small" onClick={handleClickOpen}>
         Edit
       </Button>
       <Dialog open={open} onClose={handleClose}>
@@ -111,7 +116,7 @@ export default function Editcustomer(props) {
           <Button onClick={handleClose} color="primary">
             Cancel
           </Button>
-          <Button onClick={addCustomer} color="primary">
+          <Button onClick={handleSave} color="primary">
             Save
           </Button>
         </DialogActions>

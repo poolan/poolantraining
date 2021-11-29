@@ -4,34 +4,17 @@ import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-material.css";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
-import Addcustomer from "./Addcustomer";
-import Editcustomer from "./Editcustomer";
+import AddCustomer from "./AddCustomer";
+import EditCustomer from "./EditCustomer";
+import Snackbar from "@mui/material/Snackbar";
 
 function Customerlist() {
   const [customer, setCustomer] = useState([]);
   const [open, setOpen] = useState(false);
   const [msg, setMsg] = useState("");
-  const [customers, setCustomers] = useState({
-    firstname: "",
-    lastname: "",
-    streetaddress: "",
-    postcode: "",
-    city: "",
-    email: "",
-    phone: "",
-  });
 
-  const addCustomer = () => {
-    setCustomer([customer, ...customers]);
-    setCustomer({
-      firstname: "",
-      lastname: "",
-      streetaddress: "",
-      postcode: "",
-      city: "",
-      email: "",
-      phone: "",
-    });
+  const handleClose = () => {
+    setOpen(false);
   };
 
   useEffect(() => {
@@ -45,48 +28,58 @@ function Customerlist() {
       .catch((err) => console.error(err));
   };
 
+  const addCustomer = (customer) => {
+    fetch("https://customerrest.herokuapp.com/api/customers", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify(customer),
+    })
+      .then((response) => {
+        if (response.ok) {
+          setMsg("New customer added");
+          setOpen(true);
+          fetchCustomers();
+        } else {
+          alert("Error adding");
+        }
+      })
+      .catch((err) => console.error(err));
+  };
+
   const deleteCustomer = (url) => {
     if (window.confirm("Are you sure you want to delete this customer?")) {
       fetch(url, { method: "DELETE" })
         .then((response) => {
           if (response.ok) {
+            setMsg("Customer deleted");
+            setOpen(true);
             fetchCustomers();
           } else {
-            alert("Something went wrong");
+            alert("Error deleting");
           }
         })
         .catch((err) => console.error(err));
     }
   };
 
-  const editCustomer = (url, updatedCustomer) => {
-    fetch(url, {
+  const editCustomer = (link, updatedCustomer) => {
+    fetch(link, {
       method: "PUT",
       headers: {
-        "content-type": "application/json",
+        "Content-type": "application/json",
       },
       body: JSON.stringify(updatedCustomer),
     }).then((response) => {
       if (response.ok) {
-        setMsg("Customer updated");
+        setMsg("Customer edited");
         setOpen(true);
         fetchCustomers();
       } else {
-        alert("There was an error ");
+        alert("Error editing");
       }
     });
-  };
-
-  const saveCustomer = (customer) => {
-    fetch("https://customerrest.herokuapp.com/api/customers", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(customer),
-    })
-      .then((res) => fetchCustomers())
-      .catch((err) => console.error(err));
   };
 
   const columns = [
@@ -103,7 +96,7 @@ function Customerlist() {
       sortable: false,
       filter: false,
       cellRendererFramework: (params) => (
-        <Editcustomer editCustomer={editCustomer} row={params} />
+        <EditCustomer editCustomer={editCustomer} row={params} />
       ),
     },
     {
@@ -126,16 +119,25 @@ function Customerlist() {
   ];
 
   return (
-    <div
-      className="ag-theme-material"
-      style={{ height: 600, width: "90%", margin: "auto" }}
-    >
-      <Addcustomer saveCustomer={saveCustomer} />
-      <AgGridReact
-        rowData={customer}
-        columnDefs={columns}
-        pagination={true}
-        paginationPageSize={10}
+    <div>
+      <AddCustomer addCustomer={addCustomer} />
+      <div
+        className="ag-theme-material"
+        style={{ marginTop: 20, height: 600, width: "90%", margin: "auto" }}
+      >
+        <AgGridReact
+          rowData={customer}
+          columnDefs={columns}
+          pagination={true}
+          paginationPageSize={10}
+          suppressCellSelection={true}
+        />
+      </div>
+      <Snackbar
+        open={open}
+        message={msg}
+        autoHideDuration={3000}
+        onClose={handleClose}
       />
     </div>
   );
