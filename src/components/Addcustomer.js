@@ -5,6 +5,7 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
+import AddIcon from "@mui/icons-material/Add";
 
 export default function AddCustomer(props) {
   const [open, setOpen] = React.useState(false);
@@ -40,10 +41,11 @@ export default function AddCustomer(props) {
       <Button
         color="primary"
         style={{ margin: 10 }}
-        variant="outlined"
+        variant="contained"
         onClick={handleClickOpen}
+        startIcon={<AddIcon />}
       >
-        Add Customer
+        New Customer
       </Button>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>New Customer</DialogTitle>

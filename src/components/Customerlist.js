@@ -91,7 +91,7 @@ function Customerlist() {
     { field: "email", width: "180%", sortable: true, filter: true },
     { field: "phone", width: "160%", sortable: true, filter: true },
     {
-      field: "",
+      field: "edit",
       width: 120,
       sortable: false,
       filter: false,
@@ -100,7 +100,7 @@ function Customerlist() {
       ),
     },
     {
-      field: "",
+      field: "delete",
       width: 100,
       sortable: false,
       filter: false,
