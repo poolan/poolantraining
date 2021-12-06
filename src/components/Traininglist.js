@@ -4,8 +4,9 @@ import Snackbar from "@mui/material/Snackbar";
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-material.css";
 import dayjs from "dayjs";
-import Button from "@mui/material/Button";
-import DeleteIcon from "@mui/material/Icon";
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/Delete";
+import AddTraining from "./Services/AddTraining";
 
 function Traininglist() {
   const [training, setTraining] = useState([]);
@@ -21,7 +22,7 @@ function Traininglist() {
   }, []);
 
   const fetchTrainings = () => {
-    fetch("https://customerrest.herokuapp.com/api/gettrainings")
+    fetch("https://customerrest.herokuapp.com/gettrainings")
       .then((response) => response.json())
       .then((data) => setTraining(data))
       .catch((err) => console.error(err));
@@ -48,7 +49,7 @@ function Traininglist() {
   };
 
   const columns = [
-    { field: "activity", sortable: true, filter: true },
+    { field: "activity", sortable: true, filter: true, width: "150%" },
     {
       headerName: "Date",
       valueGetter: ({ data }) => {
@@ -56,14 +57,14 @@ function Traininglist() {
       },
       sortable: true,
       filter: true,
-      width: 250,
+      width: 200,
     },
     {
       headerName: "Duration (min)",
       field: "duration",
       sortable: true,
       filter: true,
-      width: 260,
+      width: 160,
     },
     {
       headerName: "Customer",
@@ -80,13 +81,13 @@ function Traininglist() {
       width: 70,
       field: "",
       cellRendererFramework: (params) => (
-        <Button
+        <IconButton
           size="small"
           color="error"
           onClick={() => deleteTrainings(params.data.id)}
         >
           <DeleteIcon />
-        </Button>
+        </IconButton>
       ),
     },
   ];

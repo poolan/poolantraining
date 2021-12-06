@@ -4,8 +4,8 @@ import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-material.css";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
-import AddCustomer from "./AddCustomer";
-import EditCustomer from "./EditCustomer";
+import AddCustomer from "./Services/AddCustomer";
+import EditCustomer from "./Services/EditCustomer";
 import Snackbar from "@mui/material/Snackbar";
 
 function Customerlist() {
