@@ -6,7 +6,6 @@ import "ag-grid-community/dist/styles/ag-theme-material.css";
 import dayjs from "dayjs";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
-import AddTraining from "./Services/AddTraining";
 
 function Traininglist() {
   const [training, setTraining] = useState([]);
@@ -60,7 +59,7 @@ function Traininglist() {
       width: 200,
     },
     {
-      headerName: "Duration (min)",
+      headerName: "Minutes",
       field: "duration",
       sortable: true,
       filter: true,

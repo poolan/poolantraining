@@ -5,6 +5,7 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
+import AddIcon from "@mui/icons-material/Add";
 
 function AddTraining(props) {
   const [open, setOpen] = React.useState(false);
@@ -16,7 +17,7 @@ function AddTraining(props) {
   });
 
   const handleClickOpen = () => {
-    setTraining({ ...training, customer: props.row.value[1].href });
+    setTraining({ ...training, customer: props.row.data.links[0].href });
     setOpen(true);
   };
 
@@ -40,7 +41,7 @@ function AddTraining(props) {
   return (
     <div>
       <Button size="small" onClick={handleClickOpen}>
-        Add Training Session
+        <AddIcon />
       </Button>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Add Training Session</DialogTitle>

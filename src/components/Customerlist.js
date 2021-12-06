@@ -7,11 +7,23 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import AddCustomer from "./Services/AddCustomer";
 import EditCustomer from "./Services/EditCustomer";
 import Snackbar from "@mui/material/Snackbar";
+import AddTraining from "./Services/AddTraining";
+import Button from "@mui/material/Button";
 
 function Customerlist() {
   const [customer, setCustomer] = useState([]);
   const [open, setOpen] = useState(false);
   const [msg, setMsg] = useState("");
+  const [gridApi, setGridApi] = useState(null);
+
+  const onGridReady = (params) => {
+    setGridApi(params.api);
+  };
+
+  const Export = () => {
+    gridApi.exportDataAsCsv();
+    console.log(gridApi);
+  };
 
   const handleClose = () => {
     setOpen(false);
@@ -82,6 +94,24 @@ function Customerlist() {
     });
   };
 
+  const addTraining = (newTraining) => {
+    fetch("https://customerrest.herokuapp.com/api/trainings", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(newTraining),
+    }).then((response) => {
+      if (response.ok) {
+        setMsg("Training added");
+        setOpen(true);
+        fetchCustomers();
+      } else {
+        alert("Error adding training");
+      }
+    });
+  };
+
   const columns = [
     { field: "firstname", width: "130%", sortable: true, filter: true },
     { field: "lastname", width: "130%", sortable: true, filter: true },
@@ -116,6 +146,15 @@ function Customerlist() {
         </div>
       ),
     },
+    {
+      sortable: false,
+      filter: false,
+      width: 250,
+      field: "add Training",
+      cellRendererFramework: (params) => (
+        <AddTraining addTraining={addTraining} row={params} />
+      ),
+    },
   ];
 
   return (
@@ -131,8 +170,12 @@ function Customerlist() {
           pagination={true}
           paginationPageSize={10}
           suppressCellSelection={true}
+          onGridReady={onGridReady}
         />
       </div>
+      <Button variant="outlined" onClick={() => Export()}>
+        Export CSV file
+      </Button>
       <Snackbar
         open={open}
         message={msg}
